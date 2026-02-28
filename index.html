@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" id="globalMetaDesc"
+        content="RingtoneDKHR - Unlimited Premium Ringtones & Wallpapers. Download high-quality sounds for your device.">
+    <title>RingtoneDKHR - Premium Ringtones</title>
+
+    <!-- Injected Header Code -->
+    <div id="injectedHeader"></div>
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<!-- Injected Body Start Code -->
+<div id="injectedBodyStart"></div>
+
+<body>
+    <nav class="navbar">
+        <div class="logo" style="cursor: pointer;" onclick="window.location.reload();">Ringtone<span>DKHR</span></div>
+
+        <div class="nav-center">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search ringtones, movies, bgm...">
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <span id="userStatus" class="hidden"><i class="fas fa-crown"></i> Premium</span>
+            <button id="authBtn" class="btn primary-btn">Login</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Find Your Perfect Vibe</h1>
+        <p>Premium, high-quality ringtones across all your favorite languages & genres.</p>
+    </header>
+
+    <main class="container main-content" id="mainContainer">
+        <!-- Loader for Homepage -->
+        <div id="homeLoader" class="loader"><i class="fas fa-spinner fa-spin"></i> Loading Ringtones...</div>
+
+        <!-- Category Sections will be dynamically injected here -->
+        <div id="categorySectionsContainer"></div>
+    </main>
+
+    <!-- Category View Page (Hidden by default) -->
+    <main class="container hidden" id="categoryViewContainer">
+        <div class="category-header">
+            <button class="btn outline-btn back-to-home-btn"><i class="fas fa-arrow-left"></i> Back</button>
+            <h2 id="categoryViewTitle">Category Name</h2>
+        </div>
+        <div id="categoryGrid" class="poster-grid"></div>
+        <div class="pagination">
+            <button id="prevPageBtn" class="btn outline-btn" disabled>Previous</button>
+            <span id="pageIndicator">Page 1</span>
+            <button id="nextPageBtn" class="btn outline-btn">Next</button>
+        </div>
+    </main>
+
+    <!-- Search Results Page (Hidden by default) -->
+    <main class="container hidden" id="searchViewContainer">
+        <div class="category-header">
+            <button class="btn outline-btn back-to-home-btn"><i class="fas fa-arrow-left"></i> Back</button>
+            <h2 id="searchViewTitle">Search Results</h2>
+        </div>
+        <div id="searchGrid" class="poster-grid"></div>
+        <div id="searchLoader" class="loader hidden"><i class="fas fa-spinner fa-spin"></i> Searching...</div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-target="authModal">&times;</span>
+            <h2 id="authTitle">Login to RingtoneDKHR</h2>
+            <form id="authForm">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="you@example.com">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" id="authSubmitBtn" class="btn full-btn">Login</button>
+                <p class="toggle-auth">Don't have an account? <a href="#" id="toggleAuth">Sign up</a></p>
+                <p id="authError" class="error-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pricing / Premium Modal (Triggers before Razorpay) -->
+    <div id="pricingModal" class="modal">
+        <div class="modal-content pricing-content">
+            <span class="close-btn" data-target="pricingModal">&times;</span>
+            <div class="pricing-header">
+                <i class="fas fa-gem pricing-icon"></i>
+                <h2>Premium Membership</h2>
+            </div>
+            <div class="price-tag">
+                <span class="currency">₹</span><span class="amount">1</span>
+                <span class="period">/ 30 Days</span>
+            </div>
+            <ul class="pricing-benefits">
+                <li><i class="fas fa-check-circle"></i> Unlimited Ringtone Downloads</li>
+                <li><i class="fas fa-check-circle"></i> Exclusive High-Quality Audio</li>
+                <li><i class="fas fa-check-circle"></i> Premium Wallpaper Access</li>
+                <li><i class="fas fa-check-circle"></i> No Auto-Renewal (Zero Risk)</li>
+            </ul>
+            <button id="initiateRazorpayBtn" class="btn accent-btn full-btn pulse-btn">Subscribe Now via
+                Razorpay</button>
+            <p class="secure-text"><i class="fas fa-lock"></i> Secured by Razorpay</p>
+        </div>
+    </div>
+
+    <!-- Single Post Overlay (The "Post" View) -->
+    <div id="singlePostModal" class="modal full-screen-modal">
+        <div class="post-container">
+            <span class="close-btn post-close-btn" data-target="singlePostModal">&times;</span>
+
+            <div class="post-layout">
+                <div class="post-sidebar">
+                    <img id="spPoster" src="" alt="Poster" class="sp-poster-img">
+                    <div class="sp-tags" id="spTags"></div>
+                </div>
+                <div class="post-main">
+                    <h1 id="spTitle" class="sp-title"></h1>
+                    <div id="spCategory" class="sp-category-badge"></div>
+
+                    <div class="sp-description text-content" id="spDescription">
+                        <!-- SEO friendly rich description injected here -->
+                    </div>
+
+                    <div class="sp-players-section">
+                        <h3>Available Tracks</h3>
+                        <div id="spPlayersList" class="players-list">
+                            <!-- Players and individual download buttons injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="app.js"></script>
+
+    <!-- Injected Footer Code -->
+    <div id="injectedFooter"></div>
+</body>
+
+</html>

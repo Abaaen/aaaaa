@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - RingtoneDKHR</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Include a rich text editor like Quill or simple textarea for admin -->
+</head>
+
+<body class="admin-body">
+    <nav class="navbar admin-nav">
+        <div class="logo">Ringtone<span>DKHR</span> <sup>Admin</sup></div>
+        <div class="nav-actions">
+            <a href="index.html" class="btn outline-btn"><i class="fas fa-home"></i> Main Site</a>
+            <button id="adminLogoutBtn" class="btn primary-btn hidden">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container admin-container">
+        <!-- Auth Notices -->
+        <div id="adminAuthNotice" class="card text-center">
+            <h2><i class="fas fa-lock"></i> Authentication Required</h2>
+            <p>Please login via the main site to attempt admin access.</p>
+            <a href="index.html" class="btn primary-btn" style="margin-top: 1rem;">Go to Login</a>
+        </div>
+
+        <div id="adminSecondaryAuth" class="card text-center hidden" style="max-width: 400px; margin: 0 auto;">
+            <h2>Admin Verification</h2>
+            <p>Please enter the secondary admin password to proceed.</p>
+            <form id="secondaryAdminForm">
+                <div class="input-group" style="text-align: left;">
+                    <label for="adminSecPwd">Secondary Password</label>
+                    <input type="password" id="adminSecPwd" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn accent-btn full-btn">Verify Access</button>
+                <p id="adminSecError" class="error-msg"></p>
+            </form>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminPanel" class="hidden">
+
+            <!-- Admin Tabs -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="createPostTab"><i class="fas fa-pen"></i> Add/Edit
+                    Post</button>
+                <button class="tab-btn" data-tab="managePostsTab"><i class="fas fa-list"></i> Manage Posts</button>
+                <button class="tab-btn" data-tab="layoutManagerTab"><i class="fas fa-layer-group"></i> Layout
+                    Manager</button>
+                <button class="tab-btn" data-tab="settingsTab"><i class="fas fa-cog"></i> Advanced Settings</button>
+            </div>
+
+            <!-- Tab: Create Post -->
+            <div id="createPostTab" class="tab-content active-tab card form-card">
+                <h3 id="formTitle"><i class="fas fa-plus-circle"></i> Create New Post</h3>
+                <form id="addPostForm">
+                    <input type="hidden" id="editingPostId" value="">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="postTitle">Post Title</label>
+                            <input type="text" id="postTitle" required placeholder="e.g. Leo BGM Ringtones">
+                        </div>
+                        <div class="input-group">
+                            <label for="postSlug">URL Slug (SEO)</label>
+                            <input type="text" id="postSlug" required placeholder="e.g. leo-bgm-ringtones">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Categories (Select at least one)</label>
+                            <div class="checkbox-grid" id="categoryCheckboxes">
+                                <label><input type="checkbox" value="Latest" class="cat-cb"> Latest</label>
+                                <label><input type="checkbox" value="Hindi" class="cat-cb"> Hindi</label>
+                                <label><input type="checkbox" value="Telugu" class="cat-cb"> Telugu</label>
+                                <label><input type="checkbox" value="Tamil" class="cat-cb"> Tamil</label>
+                                <label><input type="checkbox" value="BGM" class="cat-cb"> BGM</label>
+                                <label><input type="checkbox" value="Malayalam" class="cat-cb"> Malayalam</label>
+                                <label><input type="checkbox" value="Bengali" class="cat-cb"> Bengali</label>
+                                <label><input type="checkbox" value="Trending" class="cat-cb"> Trending</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="postThumbnail">Thumbnail/Poster URL (Vertical Image)</label>
+                            <input type="url" id="postThumbnail" required placeholder="https://example.com/poster.jpg">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="postMetaDesc">Meta Description (SEO snippet)</label>
+                        <input type="text" id="postMetaDesc" maxlength="160"
+                            placeholder="Brief description for search engines...">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="postTags">Tags (Comma separated)</label>
+                        <input type="text" id="postTags" placeholder="thalapathy, anirudh, action, bgm">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="postContent">Post Description (SEO Rich - Use HTML)</label>
+                        <textarea id="postContent" rows="6"
+                            placeholder="<h2>About this ringtone...</h2><p>Here are the best BGM tracks...</p>"></textarea>
+                    </div>
+
+                    <div class="dynamic-list-section">
+                        <div class="section-header">
+                            <h4>Audio Players & Downloads</h4>
+                            <button type="button" id="addPlayerBtn" class="btn outline-btn btn-sm"><i
+                                    class="fas fa-plus"></i> Add Player</button>
+                        </div>
+                        <div id="playersContainer">
+                            <!-- Player Inputs Injected Here -->
+                            <div class="player-input-row">
+                                <span class="row-num">1</span>
+                                <div class="pi-fields">
+                                    <input type="text" class="pi-name" placeholder="Track Name (e.g. Badass BGM)"
+                                        required>
+                                    <input type="text" class="pi-html" placeholder="<audio controls...>" required>
+                                    <input type="url" class="pi-url" placeholder="GitHub Download URL" required>
+                                </div>
+                                <button type="button" class="btn danger-btn remove-player-btn"><i
+                                        class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn full-btn" style="margin-top: 1.5rem;">Publish
+                        Post</button>
+                    <p id="adminStatusMsg" class="status-msg"></p>
+                </form>
+            </div>
+
+            <!-- Tab: Manage Posts -->
+            <div id="managePostsTab" class="tab-content card">
+                <h3><i class="fas fa-list"></i> All Posts</h3>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Thumbnail</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="postsListBody">
+                            <tr>
+                                <td colspan="5" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Layout Manager -->
+            <div id="layoutManagerTab" class="tab-content card">
+                <h3><i class="fas fa-layer-group"></i> Homepage Layout Manager</h3>
+                <p class="text-secondary" style="margin-bottom: 1.5rem;">Drag to reorder sections, change the number of
+                    posts displayed, or remove sections from the Homepage.</p>
+
+                <div id="layoutItemsList" class="layout-list">
+                    <!-- Layout items injected here -->
+                </div>
+
+                <div class="add-layout-section"
+                    style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                    <h4>Add Category to Homepage</h4>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; align-items: flex-start;">
+                        <div class="input-group" style="margin-bottom:0; flex-grow:1;">
+                            <select id="newLayoutCat">
+                                <option value="Latest">Latest</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Telugu">Telugu</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="BGM">BGM</option>
+                                <option value="Malayalam">Malayalam</option>
+                                <option value="Bengali">Bengali</option>
+                                <option value="Trending">Trending</option>
+                            </select>
+                        </div>
+                        <div class="input-group" style="margin-bottom:0; width: 100px;">
+                            <input type="number" id="newLayoutCount" value="4" min="1" max="20" title="Posts to show">
+                        </div>
+                        <button class="btn outline-btn" id="addLayoutSectionBtn"><i class="fas fa-plus"></i>
+                            Add</button>
+                    </div>
+                </div>
+
+                <button id="saveLayoutBtn" class="btn primary-btn full-btn" style="margin-top: 2rem;">Save Layout
+                    configuration</button>
+                <p id="layoutStatusMsg" class="status-msg"></p>
+            </div>
+
+            <!-- Tab: Settings (Code Injection) -->
+            <div id="settingsTab" class="tab-content card">
+                <h3><i class="fas fa-code"></i> Code Injection Settings</h3>
+                <p class="text-secondary" style="margin-bottom: 1.5rem;">Add external scripts (Analytics, AdSense, etc.)
+                    directly into global sections of the site.</p>
+
+                <form id="settingsForm">
+                    <div class="input-group">
+                        <label for="headCode">Header Code `&lt;head&gt;`</label>
+                        <textarea id="headCode" rows="4" placeholder="<script async src='...'></script>"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="bodyCode">Body Start Check `&lt;body&gt;`</label>
+                        <textarea id="bodyCode" rows="4"
+                            placeholder="<!-- Google Tag Manager (noscript) -->"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="footerCode">Footer Code (Before `&lt;/body&gt;`)</label>
+                        <textarea id="footerCode" rows="4"
+                            placeholder="<script>console.log('footer');</script>"></textarea>
+                    </div>
+                    <button type="submit" class="btn accent-btn">Save Settings</button>
+                    <p id="settingsStatusMsg" class="status-msg"></p>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
